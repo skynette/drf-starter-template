@@ -13,10 +13,6 @@ class Home(APIView):
 		"""
 		data = {
 			"message": "Hello, world",
-			"slackUsername": "cutejosh2",
-			"backend": True,
-			"age":21,
-			"bio": "some bio data"
 		}
 		return Response(data, status=status.HTTP_200_OK)
 
