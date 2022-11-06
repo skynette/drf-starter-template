@@ -14,22 +14,20 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
 
 class RegistrationSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(
-        max_length=100, min_length=4, write_only=True)
+    password = serializers.CharField(max_length=100, min_length=4, write_only=True)
     email=serializers.EmailField(max_length=255, min_length=6)
     first_name=serializers.CharField(max_length=255, min_length=1)
     last_name=serializers.CharField(max_length=255, min_length=1)
     
     class Meta:
         model = User
-        fields = ['username', 'email', 'first_name', 'last_name']
+        fields = ['username', 'email', 'first_name', 'last_name', 'password']
 
     def validate(self, args):
         email = args.get('email', None)
-        if email:
-            if User.objects.filter(email=email).exists():
-                raise serializers.ValidationError({"Email": "Email taken"})
+        username = args.get('username', None)
+        if User.objects.filter(email=email).exists():
+            raise serializers.ValidationError({"Email": "Email taken"})
+        if User.objects.filter(username=username).exists():
+            raise serializers.ValidationError({"Username": "Username taken"})
         return super().validate(args)
-
-    def create(self, validated_data):
-        return User.objects.create_user(validated_data)

@@ -12,10 +12,12 @@ class RegistrationAPIView(generics.GenericAPIView):
 
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
+        print(request.data)
         if serializer.is_valid():
             serializer.save()
-            user_id = serializer.data['id']
-            user = User.objects.get(id=user_id)
+            print(serializer.data)
+            username = serializer.data['username']
+            user = User.objects.get(username=username)
             tokens = get_tokens_for_user(user)
             return Response({"user": serializer.data, "auth": tokens}, status=status.HTTP_201_CREATED)
         return Response({"errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
