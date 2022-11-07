@@ -12,10 +12,8 @@ class RegistrationAPIView(generics.GenericAPIView):
 
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
-        print(request.data)
         if serializer.is_valid():
             serializer.save()
-            print(serializer.data)
             username = serializer.data['username']
             user = User.objects.get(username=username)
             tokens = get_tokens_for_user(user)
